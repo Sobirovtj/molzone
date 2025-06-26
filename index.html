@@ -1,0 +1,688 @@
+<!-- by sobirov mehrob ❤ -->
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MolZone – Маркети онлайн</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- #css -->
+  <style>
+    :root {
+        --primary: #4361ee;
+        --primary-dark: #3a56d4;
+        --secondary: #3f37c9;
+        --accent: #4895ef;
+        --light: #f8f9fa;
+        --dark: #212529;
+        --success: #4cc9f0;
+        --warning: #f72585;
+        --gray: #adb5bd;
+    }
+    body {
+      margin: 0;
+      padding-top: -4px; /* Баландии навбар */
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #eef2f7, #d0e2ff);
+      color: #333;
+    }
+
+   /* Новый хедер с градиентом и анимацией */
+    header {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        padding: 4rem 1rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+        animation: pulse 15s infinite linear;
+    }
+
+    @keyframes pulse {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    header h1 {
+        margin: 0;
+        font-weight: 700;
+        font-size: 2.5rem;
+        position: relative;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    header p {
+        margin: 1rem 0 0;
+        font-size: 1.2rem;
+        opacity: 0.9;
+        position: relative;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #2563eb;
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      padding: 1.7rem 0;
+      z-index: 1000;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      position: relative;
+    }
+    nav a::after {
+      content: '';
+      display: block;
+      height: 3px;
+      width: 0;
+      background: #93c5fd;
+      transition: width 0.3s ease;
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      border-radius: 2px;
+    }
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .burger {
+      display: none;
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      right: 1rem;
+      transform: translateY(-50%);
+      z-index: 1001;
+    }
+
+    @media (max-width: 600px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        background-color: #2563eb;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        z-index: 999;
+      }
+      .nav-links.show {
+        display: flex;
+      }
+      .burger {
+        display: block;
+      }
+    }
+
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      padding: 2rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .category {
+      background-color: white;
+      padding: 1.2rem 1rem;
+      text-align: center;
+      border-radius: 12px;
+      color: #2563eb;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.3s;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.07);
+    }
+    .category:hover {
+      transform: scale(1.05);
+      background-color: #e0efff;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem 1.5rem;
+      max-width: 1100px;
+      margin: auto;
+    }
+    .product {
+      background: white;
+      border-radius: 14px;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+      position: relative;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.8s forwards;
+    }
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .image-slider {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: auto;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+    .slider-image {
+      display: none;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .slider-image.active {
+      display: block;
+    }
+    .prev, .next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.3);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      width: 32px;
+      height: 32px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    .prev { left: 5px; }
+    .next { right: 5px; }
+
+    .info-button {
+      margin-top: 0.8rem;
+      background-color: #2563eb;
+      color: white;
+      padding: 0.55rem 1.1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .product-description {
+      margin-top: 0.9rem;
+      padding: 1rem;
+      border-radius: 14px;
+      background-color: #e0e7ff;
+      display: none;
+    }
+
+    .advertisement, .testimonial-section, .video-section {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      background-color: white;
+      border-radius: 14px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.15);
+    }
+
+    footer {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  text-align: center;
+  padding: 4rem 1rem;
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+}
+
+footer::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+  animation: pulse 15s infinite linear;
+  z-index: 0;
+}
+
+footer h2, footer p {
+  position: relative;
+  z-index: 1;
+  margin: 0.5rem 0;
+}
+
+
+    
+    /* === банер === */
+    .parallax-section {
+      position: relative;
+      
+      background-attachment: fixed;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      height: 350px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+      font-size: 1.5rem;
+      margin: 0rem 0;
+      border-radius: -23px;
+    }
+
+    .parallax-content {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 1.5rem 2rem;
+      border-radius: 10px;
+      max-width: 600px;
+      text-align: center;
+    }
+    
+    .image-modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  padding-top: 60px;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.9);
+}
+
+.modal-content {
+  margin: auto;
+  display: block;
+  max-width: 90%;
+  max-height: 80%;
+  border-radius: 10px; 
+}
+.image-modal .close {
+  position: absolute;
+  top: 20px;
+  right: 35px;
+  color: #fff;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+    /* Buttons to Telegram and WhatsApp */
+    .contact-btn {
+      display: inline-block;
+      margin: 0 1rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .telegram-btn {
+      background-color: #0088cc;
+    }
+
+    .telegram-btn:hover {
+      background-color: #006699;
+    }
+
+    .whatsapp-btn {
+      background-color: #25D366;
+    }
+
+    .whatsapp-btn:hover {
+      background-color: #1ebe57;
+    }
+  </style>
+    <!-- #css  stop-->
+
+    <!-- #html -->
+</head>
+<body>
+<header>
+  <h1>MolZone.Tj</h1>
+  <p>Маркети онлайн барои хариди маҳсулоти электронӣ ва дигар лавозимот</p>
+</header>
+<!-- Ҷустуҷӯи  
+ <nav>
+    <div class="nav-links" id="navLinks">
+      <a href="#">Асосӣ</a>
+      <a href="#">Маҳсулот</a>
+      <a href="#">Аксияҳо</a>
+      <a href="#">Тамос</a>
+    </div>
+    <div class="burger" id="burger">
+      <i class="fas fa-home"></i>
+    </div>
+  </nav>
+</nav>
+
+  -->
+
+<!-- КАТЕГОРИЯҲО 
+<section class="categories">
+  <a href="#" class="category">Телефонҳо</a>
+  <a href="#" class="category">Ноутбукҳо</a>
+  <a href="#" class="category">Гӯшмонакҳо</a>
+  <a href="#" class="category">Смарт соатҳо</a>
+  <a href="#" class="category">Аксессуарҳо</a>
+  <a href="#" class="category">Б/у</a>
+</section>
+ КАТЕГОРИЯҲО stop-->
+
+<!-- Молҳои дастрас -->
+<div style="max-width: 1100px; margin: 2rem auto 1rem; text-align:center;">
+  <h2 style="color:#2563eb;">Молҳои дастрас</h2>
+</div>
+<!-- Молҳои дастрас -->
+
+<!-- section 1-->
+<section class="products">
+  <!-- article -->
+<!-- article -->
+<article class="product" style="animation-delay: 0.3s;">
+  <div class="image-slider">
+    <img src="img/мышx3.jpg" alt="Муши Gaming MILANG" class="slider-image active" onclick="zoomImage(this)" />
+    <!-- Агар тасвири дуюм доред, инҷо илова кунед -->
+    <!-- <img src="img/мышx3_2.jpg" alt="Муши MILANG - иловагӣ" class="slider-image" onclick="zoomImage(this)" /> -->
+    <button class="prev" onclick="changeSlide(this, -1)">‹</button>
+    <button class="next" onclick="changeSlide(this, 1)">›</button>
+  </div>
+  <h3>Муши Gaming MILANG</h3>
+  <p>Ранг: Сиёҳ бо равшании RGB</p>
+  <p>
+    Нарх:
+    <span style="text-decoration: line-through; color: red;">80 с.</span>
+    <span style="font-weight: bold; color: green;">40 с.</span>
+  </p>
+  <button class="info-button" onclick="toggleDescription(this)">Тафсилот</button>
+  <div class="product-description" style="display: none;">
+    🎮 Сенсори ҳассос: 3200 DPI<br>
+    🌈 Равшанӣ: RGB бо чанд режим<br>
+    🔘 Тугмаҳо: 6 адад (дар бар мегирад DPI switch)<br>
+    🔌 Пайвастшавӣ: USB (симдор)<br>
+    💻 Дастгирӣ: Windows ва MacOS
+  </div>
+</article>
+<!-- article -->
+
+<!-- article -->
+
+<!-- article -->
+  <article class="product" style="animation-delay: 0.3s;">
+    <div class="image-slider">
+      <img src="img/клявиатура3x2.jpg" alt="Клавиатура ва муш" class="slider-image active" onclick="zoomImage(this)" />
+      <img src="img/клявиатураy.jpg" alt="Клавиатура ва муш - иловагӣ" class="slider-image" onclick="zoomImage(this)" />
+      <button class="prev" onclick="changeSlide(this, -1)">‹</button>
+      <button class="next" onclick="changeSlide(this, 1)">›</button>
+    </div>
+    <h3>Клавиатура + Муш LIMEIDE T15</h3>
+  <p>Ранг: Сиёҳ</p>
+  <p>
+    Нарх:
+    <span style="text-decoration: line-through; color: red;">70 с.</span>
+    <span style="font-weight: bold; color: green;">50 с.</span>
+  </p>
+  <button class="info-button" onclick="toggleDescription(this)">Тафсилот</button>
+  <div class="product-description" style="display: none;">
+    🖥 Комплект: клавиатура ва муши симдор<br>
+    🔌 Пайвастшавӣ тавассути USB<br>
+    🧩 Тарҳи бароҳат барои кор ва таҳсил<br>
+    💻 Дастгирӣ: Windows, Mac, Linux
+  </div>
+  </article>
+<!-- article -->
+
+<!-- article -->
+  <article class="product" style="animation-delay: 0.5s;">
+    <div class="image-slider">
+      <img src="img/клявиатура4х1.jpg" alt="Клавиатура ва муш" class="slider-image active" onclick="zoomImage(this)" />
+      <img src="img/клявиатураy.jpg" alt="Клавиатура ва муш - иловагӣ" class="slider-image" onclick="zoomImage(this)" />
+      <button class="prev" onclick="changeSlide(this, -1)">‹</button>
+      <button class="next" onclick="changeSlide(this, 1)">›</button>
+    </div>
+ <h3>Клавиатура + Муш LIMEIDE T15</h3>
+  <p>Ранг: Сиёҳ</p>
+  <p>
+    Нарх:
+    <span style="text-decoration: line-through; color: red;">100 с.</span>
+    <span style="font-weight: bold; color: green;">80 с.</span>
+  </p>
+  <button class="info-button" onclick="toggleDescription(this)">Тафсилот</button>
+  <div class="product-description" style="display: none;">
+    🖥 Комплект: клавиатура ва муши симдор<br>
+    🔌 Пайвастшавӣ: USB<br>
+    🎮 Равшании рангин (RGB)<br>
+    💼 Бароҳат барои кор ва таҳсил<br>
+    💻 Мутобиқат: Windows, Mac, Linux
+  </div>
+
+  </article>
+<!-- article -->
+</section>
+<!-- section 1 stop-->
+
+
+
+<!-- Молҳои дастрас  2-->
+<!-- <div style="max-width: 1100px; margin: 2rem auto 1rem; text-align:center;">
+  <h2 style="color:#2563eb;">Молҳои дастрас</h2>
+</div> -->
+<!-- Молҳои дастрас  2-->
+
+<!-- section 2 -->
+<!-- <section class="products">
+  <article class="product" style="animation-delay: 0.1s;">
+    <div class="image-slider">
+      <img src="img/клявиатура2.jpg" alt="Клавиатура ва муш" class="slider-image active" onclick="zoomImage(this)" />
+      <img src="img/клявиатураy.jpg" alt="Клавиатура ва муш - иловагӣ" class="slider-image" onclick="zoomImage(this)" />
+      <button class="prev" onclick="changeSlide(this, -1)">‹</button>
+      <button class="next" onclick="changeSlide(this, 1)">›</button>
+    </div>
+    <h3>Телевизори Samsung 55"</h3>
+    <p>Ранги: Сиёҳ</p>
+    <button class="info-button" onclick="toggleDescription(this)">Тафсилот</button>
+    <div class="product-description">
+      Андоза: 55 дюйм, 4K UHD, Смарт ТВ
+    </div>
+  </article> -->
+  <!-- article -->
+  <!-- <article class="product" style="animation-delay: 0.3s;">
+    <div class="image-slider">
+      <img src="img/клявиатура2.jpg" alt="Клавиатура ва муш" class="slider-image active" onclick="zoomImage(this)" />
+      <img src="img/клявиатураy.jpg" alt="Клавиатура ва муш - иловагӣ" class="slider-image" onclick="zoomImage(this)" />
+      <button class="prev" onclick="changeSlide(this, -1)">‹</button>
+      <button class="next" onclick="changeSlide(this, 1)">›</button>
+    </div>
+    <h3>Холодильник LG</h3>
+    <p>Ранги: Сафед</p>
+    <button class="info-button" onclick="toggleDescription(this)">Тафсилот</button>
+    <div class="product-description">
+      Ҳаҷми 300 л, энергияи A++
+    </div>
+  </article> -->
+  <!-- article -->
+
+  <!-- article -->
+  <!-- <article class="product" style="animation-delay: 0.5s;">
+    <div class="image-slider">
+     <img src="img/клявиатура2.jpg" alt="Клавиатура ва муш" class="slider-image active" onclick="zoomImage(this)" />
+      <img src="img/клявиатураy.jpg" alt="Клавиатура ва муш - иловагӣ" class="slider-image" onclick="zoomImage(this)" />
+      <button class="prev" onclick="changeSlide(this, -1)">‹</button>
+      <button class="next" onclick="changeSlide(this, 1)">›</button>
+    </div>
+    <h3>Миксери Bosch</h3>
+    <p>Ранги: Сафед</p>
+    <button class="info-button" onclick="toggleDescription(this)">Тафсилот</button>
+    <div class="product-description">
+      500 Ватт, 5 суръат
+    </div>
+  </article> -->
+  <!-- article -->
+<!-- </section> -->
+<!-- section 2 stop-->
+
+
+<!-- section 3-->
+<section class="advertisement">
+  <h2>Аксияи махсус!</h2>
+  <p>Гардиши маҳдуд барои маҳсулоти бо нархи арзон!</p>
+  <!-- article -->
+<article class="product" style="animation-delay: 0.4s;">
+  <div class="image-slider">
+    <img src="img/клявиатура2.jpg" alt="Клавиатура ва муш (комплект)" class="slider-image active" onclick="zoomImage(this)" />
+    <img src="img/клявиатураy.jpg" alt="Клавиатура ва муш - иловагӣ" class="slider-image" onclick="zoomImage(this)" />
+    <button class="prev" onclick="changeSlide(this, -1)">‹</button>
+    <button class="next" onclick="changeSlide(this, 1)">›</button>
+  </div>
+  <h3>Клавиатура + Муш (комплект)</h3>
+  <p>Ранг: Сиёҳ</p>
+  <p>
+    Нарх: 
+    <span style="text-decoration: line-through; color: red;">100 с.</span>
+    <span style="font-weight: bold; color: green; font-size: 1.3em;">70 с.</span>
+  </p>
+  <button class="info-button" onclick="toggleDescription(this)">Тафсилот</button>
+  <div class="product-description" style="display: none;">
+    🖥 Комплекти бесим барои компютер ва ноутбук<br>
+    🔌 Пайвастшавӣ тавассути USB-ресивер<br>
+    ✋ Тарҳи эргономикӣ барои истифодаи дарозмуддат<br>
+    🔋 Батареяи устувор бо давомнокии баланд
+  </div>
+</article>
+<!-- article -->
+
+</section>
+<!-- section 3-->
+
+
+<!-- МОДАЛ (Zoom Image View) -->
+<div id="imageModal" class="image-modal" onclick="closeModal()">
+  <span class="close">&times;</span>
+  <img class="modal-content" id="modalImage">
+</div>
+<!-- #html stop-->
+ 
+<!-- СКРИПТ (JavaScript) -->
+<script>
+function zoomImage(img) {
+  const modal = document.getElementById("imageModal");
+  const modalImg = document.getElementById("modalImage");
+  modal.style.display = "block";
+  modalImg.src = img.src;
+}
+function closeModal() {
+  document.getElementById("imageModal").style.display = "none";
+}
+</script>
+<!-- МЕЪМОРИИ СЕКЦИЯИ ТЕСТИМОНАЛ -->
+<section class="testimonial-section">
+  <h2>Назарҳои мизоҷон</h2>
+  <p>"Хизматрасонӣ аъло, маҳсулот бо сифат!" – Саид</p>
+  <p>"Бо MolZone харид кардан хеле осон аст!" – Мадина</p>
+</section>
+<!-- МЕЪМОРИИ СЕКЦИЯИ ТЕСТИМОНАЛ -->
+ <!-- 🟩 Тугмаҳои Telegram ва WhatsApp -->
+  <!-- 🟩 Тугмаҳои Telegram ва WhatsApp дар марказ -->
+<div style="margin-top: 2rem; text-align: center;">
+  <a class="contact-btn telegram-btn" href="https://t.me/MolZonetj" target="_blank">
+    <i class="fab fa-telegram"></i> Telegram
+  </a>
+  <a class="contact-btn whatsapp-btn" href="https://wa.me/992000208746" target="_blank">
+    <i class="fab fa-whatsapp"></i> WhatsApp
+  </a>
+</div>
+
+
+<!-- footer -->
+<footer style="background: linear-gradient(90deg, #1e40af, #1e3a8a); padding: 2rem; color: white; font-family: 'Poppins', sans-serif;">
+  <div style="max-width: 1200px; margin: auto; text-align: center;">
+    <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">📦 MolZone.Tj</h3>
+    <p style="font-size: 1rem;">Сомонаи боэътимоди шумо барои хариди техникаи муосир!</p>
+    <p style="margin: 0.8rem 0;">📍 Душанбе, Тоҷикистон | 📞 +992 900 00 00 00</p>
+
+    <!-- Линкҳои дохили футер -->
+    <div style="margin-top: 1rem;">
+      <a href="#" style="color: #a5b4fc; margin: 0 1rem; text-decoration: none;">Саволҳо</a>
+      <a href="#" style="color: #a5b4fc; margin: 0 1rem; text-decoration: none;">Шартҳои истифода</a>
+      <a href="#" style="color: #a5b4fc; margin: 0 1rem; text-decoration: none;">Махфият</a>
+    </div>
+
+    
+
+    <p style="margin-top: 1.5rem; font-size: 0.9rem; color: #cbd5e1;">&copy; 2025 MolZone.Tj – Ҳамаи ҳуқуқҳо маҳфузанд</p>
+  </div>
+</footer>
+
+
+
+<!-- footer -->
+<script>
+  // Тасвири слайдер
+  function changeSlide(button, direction) {
+    const slider = button.closest('.image-slider');
+    const images = slider.querySelectorAll('.slider-image');
+    let currentIndex = Array.from(images).findIndex(img => img.classList.contains('active'));
+
+    images[currentIndex].classList.remove('active');
+    let newIndex = currentIndex + direction;
+
+    if (newIndex < 0) newIndex = images.length - 1;
+    if (newIndex >= images.length) newIndex = 0;
+
+    images[newIndex].classList.add('active');
+  }
+  // Тугмаи "Тафсилот"
+  function toggleDescription(button) {
+    const desc = button.nextElementSibling;
+    desc.style.display = desc.style.display === 'block' ? 'none' : 'block';
+  }
+  // Менюи адаптивӣ (бургер)
+  document.getElementById('burger').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('show');
+  });
+</script>
+  <script>
+    const burger = document.getElementById("burger");
+    const navLinks = document.getElementById("navLinks");
+    burger.addEventListener("click", () => {
+      navLinks.classList.toggle("active");
+    });
+  </script>
+</body>
+</html>
+  
